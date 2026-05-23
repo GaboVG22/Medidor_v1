@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>FotoMedidor de Zonas</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>FotoMedidor de Zonas</h1>
+      <p>Calcula dimensiones aproximadas de una zona delineada sobre una foto.</p>
+    </div>
+    <span id="statusBadge" class="badge">Sin foto</span>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls" aria-label="Controles de medición">
+      <h2>1. Cargar foto</h2>
+      <label class="file-box">
+        <input id="imageInput" type="file" accept="image/*" capture="environment" />
+        <span>Tomar o cargar foto</span>
+      </label>
+
+      <div class="tip">
+        Para obtener dimensiones reales, primero calibra con una medida conocida: regla, huincha, moneda, tubo, ancho de canaleta, etc. Debe estar en el mismo plano de la zona medida.
+      </div>
+
+      <h2>2. Calibrar escala</h2>
+      <div class="row">
+        <label>
+          Largo real
+          <input id="knownLength" type="number" min="0.001" step="0.001" value="10" />
+        </label>
+        <label>
+          Unidad
+          <select id="unitSelect">
+            <option value="mm">mm</option>
+            <option value="cm" selected>cm</option>
+            <option value="m">m</option>
+          </select>
+        </label>
+      </div>
+      <button id="calibrateModeBtn" class="primary">Dibujar línea de calibración</button>
+      <button id="saveScaleBtn">Guardar escala</button>
+      <p id="scaleInfo" class="muted">Escala pendiente.</p>
+
+      <h2>3. Delinear zona</h2>
+      <button id="outlineModeBtn" class="primary">Delinear con dedo/lápiz</button>
+      <div class="row buttons">
+        <button id="closeShapeBtn">Cerrar y calcular</button>
+        <button id="undoBtn">Deshacer</button>
+      </div>
+      <div class="row buttons">
+        <button id="clearBtn">Borrar zona</button>
+        <button id="clearAllBtn">Reiniciar</button>
+      </div>
+
+      <h2>4. Exportar</h2>
+      <div class="row buttons">
+        <button id="exportPngBtn">Imagen anotada</button>
+        <button id="exportCsvBtn">CSV mediciones</button>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <div>
+          <strong>Modo:</strong> <span id="modeLabel">Delinear</span>
+        </div>
+        <div class="muted" id="pointerHint">Carga una foto para comenzar.</div>
+      </div>
+      <canvas id="photoCanvas" aria-label="Área de dibujo sobre la fotografía"></canvas>
+    </section>
+
+    <section class="panel results" aria-label="Resultados">
+      <h2>Resultados</h2>
+      <div id="resultsBox" class="empty-results">
+        Aún no hay medición. Carga una foto, calibra escala y delinea la zona.
+      </div>
+
+      <h3>Mediciones guardadas</h3>
+      <div id="historyBox" class="history empty-results">Sin registros.</div>
+
+      <h3>Precisión esperada</h3>
+      <ul class="notes">
+        <li>La medición es aproximada, no reemplaza levantamiento topográfico ni fotogrametría profesional.</li>
+        <li>La cámara debe estar lo más perpendicular posible a la superficie.</li>
+        <li>La referencia de calibración debe estar en el mismo plano que la zona delineada.</li>
+        <li>Si la foto está muy inclinada, habrá distorsión de perspectiva.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>Aplicación local: la foto se procesa en tu navegador y no se sube a ningún servidor.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
